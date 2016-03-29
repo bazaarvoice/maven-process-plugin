@@ -52,7 +52,7 @@ public class ProcessStartMojo extends AbstractProcessMojo {
         // try to check if directory is absolute
         // https://github.com/bazaarvoice/maven-process-plugin/issues/11
         File potentialWorkingDir = new File(workingDir);
-        if (potentialWorkingDir.exists() && potentialWorkingDir.isDirectory()) {
+        if (potentialWorkingDir.isAbsolute() && potentialWorkingDir.exists() && potentialWorkingDir.isDirectory()) {
             return potentialWorkingDir;
         }
         return ensureDirectory(new File(project.getBuild().getDirectory(), workingDir));
