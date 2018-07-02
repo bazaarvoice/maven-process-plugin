@@ -13,7 +13,7 @@ public class ProcessHealthCondition {
 
     private ProcessHealthCondition() {}
 
-    public static void waitSecondsUntilHealthy(String healthCheckUrl, int timeoutInSeconds) {
+    public static void waitSecondsUntilHealthy(String healthCheckUrl, int timeoutInSeconds, boolean expect2xx) {
         if (healthCheckUrl == null) {
             // Wait for timeout seconds to let the process come up
             sleep(timeoutInSeconds);
@@ -23,17 +23,17 @@ public class ProcessHealthCondition {
         final URL url = url(healthCheckUrl);
         while ((System.currentTimeMillis() - start) / 1000 < timeoutInSeconds) {
             internalSleep();
-            if (is200(url)) {
+            if (isHealthy(url, expect2xx)) {
                 return; // success!!!
             }
         }
         throw new RuntimeException("Process was not healthy even after " + timeoutInSeconds + " seconds");
     }
 
-    private static boolean is200(URL url) {
+    private static boolean isHealthy(URL url, boolean expect2xx) {
         try {
             final int code = getResponseCode(url);
-            return 200 <= code && code < 300;
+            return !expect2xx || (200 <= code && code < 300);
         } catch (Exception e) {
             return false;
         }

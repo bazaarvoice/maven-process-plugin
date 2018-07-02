@@ -25,6 +25,9 @@ public abstract class AbstractProcessMojo extends AbstractMojo {
     @Parameter(property = "exec.healthcheckUrl")
     protected String healthcheckUrl;
 
+    @Parameter(property = "exec.expect2xx", defaultValue = "true")
+    protected boolean expect2xx;
+
     @Parameter(property = "exec.waitAfterLaunch", required = false, defaultValue = "30")
     protected int waitAfterLaunch;
 
