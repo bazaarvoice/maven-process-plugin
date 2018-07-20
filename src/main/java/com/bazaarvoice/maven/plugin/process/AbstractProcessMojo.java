@@ -17,7 +17,7 @@ public abstract class AbstractProcessMojo extends AbstractMojo {
     protected String[] arguments;
 
     @Parameter(property = "exec.workingDir")
-    protected String workingDir;
+    protected File workingDir;
 
     @Parameter(property = "exec.name")
     protected String name;
