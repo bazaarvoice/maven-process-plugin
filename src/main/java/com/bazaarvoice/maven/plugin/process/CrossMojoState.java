@@ -13,6 +13,8 @@ public class CrossMojoState {
 
     @SuppressWarnings("unchecked")
     public static Stack<ExecProcess> getProcesses(Map pluginContext) {
+    	if(pluginContext == null) return null;
+    	
         Stack<ExecProcess> processes = (Stack<ExecProcess>) pluginContext.get(PROCESSES);
         if (processes == null) {
             processes = new Stack<ExecProcess>();

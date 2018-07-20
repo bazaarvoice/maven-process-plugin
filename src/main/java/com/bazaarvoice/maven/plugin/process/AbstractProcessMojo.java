@@ -56,6 +56,9 @@ public abstract class AbstractProcessMojo extends AbstractMojo {
     }
 
     public AbstractProcessMojo() {
+    	// make sure CrossMojoState class is loaded to avoid NoClassDefFoundErrors
+    	CrossMojoState.getProcesses(getPluginContext());
+    	
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
                 Stack<ExecProcess> processesStack = CrossMojoState.getProcesses(getPluginContext());
