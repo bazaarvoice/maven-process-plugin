@@ -96,6 +96,9 @@ public class StdOutRedirectorTest {
         while ((nread = expectedFileInputStream.read(dataBytes)) != -1) {
             expectedMD.update(dataBytes, 0, nread);
         };
+        
+        actualFileInputStream.close();
+        expectedFileInputStream.close();
 
         assertEquals(actualMD.getDigestLength(), expectedMD.getDigestLength());
         assertEquals(actualMD.digest(), expectedMD.digest());
