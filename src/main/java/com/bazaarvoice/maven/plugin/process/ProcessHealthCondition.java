@@ -7,50 +7,66 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.net.URLConnection;
+import java.util.Base64;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import org.apache.commons.io.IOUtils;
 
 public class ProcessHealthCondition {
     private static final int SECONDS_BETWEEN_CHECKS = 1;
 
     private ProcessHealthCondition() {}
 
-    public static void waitSecondsUntilHealthy(String healthCheckUrl, int timeoutInSeconds) {
-        if (healthCheckUrl == null) {
+    public static void waitSecondsUntilHealthy(HealthCheckConfig healthcheck, int timeoutInSeconds) {
+        if (healthcheck == null || healthcheck.getUrl() == null) {
             // Wait for timeout seconds to let the process come up
             sleep(timeoutInSeconds);
             return;
         }
         final long start = System.currentTimeMillis();
-        final URL url = url(healthCheckUrl);
+        final URL url = url(healthcheck.getUrl());
         while ((System.currentTimeMillis() - start) / 1000 < timeoutInSeconds) {
             internalSleep();
-            if (is200(url)) {
+            if (isHealthy(healthcheck, url)) {
                 return; // success!!!
             }
         }
         throw new RuntimeException("Process was not healthy even after " + timeoutInSeconds + " seconds");
     }
 
-    private static boolean is200(URL url) {
-        try {
-            final int code = getResponseCode(url);
-            return 200 <= code && code < 300;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    private static int getResponseCode(URL url) {
+    private static boolean isHealthy(HealthCheckConfig healthcheck, URL url) {
         InputStream in = null;
         try {
-            final HttpURLConnection http = (HttpURLConnection) url.openConnection();
+            URLConnection openConnection = url.openConnection();
+            if (healthcheck.basicAuth != null) {
+                String encoding = Base64.getEncoder().encodeToString((healthcheck.getBasicAuth().getUsername() + ":" + healthcheck.getBasicAuth().getPassword()).getBytes());
+                openConnection.setRequestProperty("Authorization", "Basic " + encoding);
+            }
+            final HttpURLConnection http = (HttpURLConnection) openConnection;
+
             http.setRequestMethod("GET");
             http.connect();
             in = http.getInputStream();
-            return http.getResponseCode();
+            int responseCode = http.getResponseCode();
+            if (responseCode != healthcheck.getStatus())
+                return false;
+            if (healthcheck.bodyMatchExpression != null) {
+                Pattern pattern = Pattern.compile(healthcheck.bodyMatchExpression);
+                List<String> readLines = IOUtils.readLines(in);
+                String fullbody = readLines.stream().collect(Collectors.joining("\n"));
+                Matcher matcher = pattern.matcher(fullbody);
+                if (!matcher.find())
+                    return false;
+            }
+            return true;
         } catch (ProtocolException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return false;
         } finally {
             closeQuietly(in);
         }

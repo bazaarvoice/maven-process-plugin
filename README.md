@@ -30,6 +30,13 @@ Improve end-to-end integration testing with maven. Process Executor Plugin allow
 * __workingDir__: Give a working directory for your process to start in. Could be same as name. If not provided, the build directory is used.
 * __waitForInterrupt__: Optional. Setting this value to true will pause your build after starting every process to give you a chance to manually play with your system. Default is false.
 * __healthcheckUrl__: Recommended, but optional. You should provide a healthcheck url, so the plugin waits until the healthchecks are all green for your process. If not provided, the plugin waits for `waitAfterLaunch` seconds before moving on.
+* __healthcheck__:Recommend, but optional. Will be overriden, if the property healthchechUrl is given. Compared to the healthcheckUrl this has additional properties.
+  * __url__: Same as the healthcheckUrl but part of the more complex configuration.
+  * __status__: The expected status code.
+  * __bodyMatchExpression__: A regular expression wich has to match against the response-body.
+  * __basicAuth__: Allows for Basic-Authentication at the targeted endpoint.
+    * __username__: username to use for authentication.
+    * __password__: password to use for authentication.
 * __waitAfterLaunch__: Optional. This specifies the maximum time in seconds to wait after launching the process. If healthcheckUrl is specified, then it will move on as soon as the health checks pass. Default is 30 seconds.
 * __processLogFile__: Optional. Specifying a log file will redirect the process output to the specified file. Recommended as this will avoid cluttering your build's log with the log of external proccesses.
 
@@ -77,6 +84,16 @@ The latest version is 0.7.
                             <workingDir>shovel</workingDir>
                             <waitForInterrupt>false</waitForInterrupt>
                             <healthcheckUrl>http://localhost:8181/healthcheck</healthcheckUrl>
+                            <!-- alternative to healthcheckUrl -->
+                            <healthcheck>
+                                <url>http://localhost:8181/healthcheck</url>
+                                <status>220</status>
+                                <bodyMatchExpression>^OK.$</bodyMatchExpression>
+                                <basicAuth>
+                                    <username>admin</username>
+                                    <password>admin</password>
+                                </basicAuth>
+                            </healthcheck>
                             <arguments>
                                 <argument>java</argument>
                                 <argument>-jar</argument>
@@ -98,5 +115,3 @@ The latest version is 0.7.
             </plugin>
         </plugins>
     </build>
-       
-    
