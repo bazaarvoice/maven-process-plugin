@@ -14,7 +14,9 @@ public class ExecProcess {
     private Process process = null;
     private final List<StdoutRedirector> redirectors = Lists.newArrayList();
     private File processLogFile = null;
+    private boolean redirectErrorStream;
     private final String name;
+    final ProcessBuilder pb = new ProcessBuilder();
 
     public ExecProcess(String name) {
         this.name = name;
@@ -24,12 +26,22 @@ public class ExecProcess {
         this.processLogFile = emoLogFile;
     }
 
+    public void setRedirectErrorStream(boolean isRedirect) {
+        this.redirectErrorStream  = isRedirect;
+    }
+
     public String getName() {
         return name;
     }
 
     public void execute(File workingDirectory, Log log, String... args) {
         final ProcessBuilder pb = new ProcessBuilder();
+
+        if(redirectErrorStream) {
+            pb.redirectErrorStream(true);
+            pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+        }
+
         log.info("Using working directory for this process: " + workingDirectory);
         pb.directory(workingDirectory);
         pb.command(args);

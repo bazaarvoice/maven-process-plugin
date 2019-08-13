@@ -37,6 +37,9 @@ public abstract class AbstractProcessMojo extends AbstractMojo {
     @Parameter(defaultValue = "false", property = "exec.skip")
     protected boolean skip;
 
+    @Parameter(defaultValue = "false", property = "exec.redirectErrorStream")
+    protected boolean redirectErrorStream;
+
     protected static File ensureDirectory(File dir) {
         if (!dir.mkdirs() && !dir.isDirectory()) {
             throw new RuntimeException("couldn't create directories: " + dir);

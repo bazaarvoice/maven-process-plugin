@@ -37,6 +37,9 @@ public class ProcessStartMojo extends AbstractProcessMojo {
         if (null != processLogFile) {
             exec.setProcessLogFile(new File(processLogFile));
         }
+
+        exec.setRedirectErrorStream(redirectErrorStream);
+
         getLog().info("Starting process: " + exec.getName());
         exec.execute(processWorkingDirectory(), getLog(), arguments);
         CrossMojoState.addProcess(exec, getPluginContext());
