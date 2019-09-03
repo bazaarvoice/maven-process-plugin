@@ -6,6 +6,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Stack;
 
 @Mojo (name = "stop-all", defaultPhase = LifecyclePhase.POST_INTEGRATION_TEST)
@@ -16,6 +17,11 @@ public class ProcessStopMojo extends AbstractProcessMojo {
             throws MojoExecutionException, MojoFailureException {
         for(String arg : arguments) {
             getLog().info("arg: " + arg);
+        }
+        if( environment != null ){
+        	for( Map.Entry<String,String> entry : environment.entrySet() ){
+                getLog().info("env: " + entry.getKey() +"=" + entry.getValue());
+        	}
         }
         try {
             stopAllProcesses();

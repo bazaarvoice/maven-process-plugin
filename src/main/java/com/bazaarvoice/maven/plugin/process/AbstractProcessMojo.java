@@ -7,6 +7,7 @@ import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Stack;
 
 public abstract class AbstractProcessMojo extends AbstractMojo {
@@ -16,6 +17,9 @@ public abstract class AbstractProcessMojo extends AbstractMojo {
     @Parameter (property = "exec.arguments")
     protected String[] arguments;
 
+    @Parameter (property = "exec.environment")
+    protected Map<String,String> environment;
+    
     @Parameter(property = "exec.workingDir")
     protected String workingDir;
 

@@ -7,6 +7,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 
 import java.io.File;
+import java.util.Map;
 
 @Mojo (name = "start", defaultPhase = LifecyclePhase.PRE_INTEGRATION_TEST)
 public class ProcessStartMojo extends AbstractProcessMojo {
@@ -20,6 +21,11 @@ public class ProcessStartMojo extends AbstractProcessMojo {
         }
         for (String arg : arguments) {
             getLog().info("arg: " + arg);
+        }
+        if( environment != null ){
+        	for( Map.Entry<String,String> entry : environment.entrySet() ){
+                getLog().info("env: " + entry.getKey() +"=" + entry.getValue());
+        	}
         }
         getLog().info("Full command line: " + Joiner.on(" ").join(arguments));
         try {
@@ -41,7 +47,7 @@ public class ProcessStartMojo extends AbstractProcessMojo {
         exec.setRedirectErrorStream(redirectErrorStream);
 
         getLog().info("Starting process: " + exec.getName());
-        exec.execute(processWorkingDirectory(), getLog(), arguments);
+        exec.execute(processWorkingDirectory(), getLog(), environment, arguments);
         CrossMojoState.addProcess(exec, getPluginContext());
         ProcessHealthCondition.waitSecondsUntilHealthy(healthcheckUrl, waitAfterLaunch);
         getLog().info("Started process: " + exec.getName());

@@ -2,10 +2,11 @@
 *.ipr
 *.iws
 .idea
+.classpath
+.settings/
 
 target/
 war/
 
 *.log
 .DS_Store
-
