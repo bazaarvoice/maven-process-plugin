@@ -46,7 +46,7 @@ public class ProcessHealthCondition {
         while ((System.currentTimeMillis() - start) / 1000 < timeoutInSeconds) {
             internalSleep();
     		try {
-    			socket.connect(socketAddress, SECONDS_BETWEEN_CHECKS);
+    			socket.connect(socketAddress, SECONDS_BETWEEN_CHECKS * 1000);
     			socket.close();
     			return; // success!!!
     		} catch (Exception e) {
