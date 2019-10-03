@@ -43,7 +43,10 @@ public class ProcessStartMojo extends AbstractProcessMojo {
         getLog().info("Starting process: " + exec.getName());
         exec.execute(processWorkingDirectory(), getLog(), arguments);
         CrossMojoState.addProcess(exec, getPluginContext());
-        ProcessHealthCondition.waitSecondsUntilHealthy(healthcheckUrl, waitAfterLaunch);
+        if (healthcheckUrl==null)
+        	ProcessHealthCondition.waitSecondsUntilHealthy(healthcheckUrl, waitAfterLaunch);
+        else
+        	ProcessHealthCondition.waitSecondsUntilHealthy(tcpHealthcheckHostname, tcpHealthcheckPort, waitAfterLaunch);
         getLog().info("Started process: " + exec.getName());
     }
 

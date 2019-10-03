@@ -25,6 +25,12 @@ public abstract class AbstractProcessMojo extends AbstractMojo {
     @Parameter(property = "exec.healthcheckUrl")
     protected String healthcheckUrl;
 
+    @Parameter(property = "exec.tcpHealthcheckHostname")
+    protected String tcpHealthcheckHostname;
+
+    @Parameter(property = "exec.tcpHealthcheckPort")
+    protected int tcpHealthcheckPort;
+
     @Parameter(property = "exec.waitAfterLaunch", required = false, defaultValue = "30")
     protected int waitAfterLaunch;
 
