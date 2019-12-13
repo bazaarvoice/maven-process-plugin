@@ -58,6 +58,11 @@
             <artifactId>commons-exec</artifactId>
             <version>1.2</version>
         </dependency>
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.5</version>
+        </dependency>
 
         <!-- Testing -->
         <dependency>
