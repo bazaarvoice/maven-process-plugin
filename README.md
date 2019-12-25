@@ -35,14 +35,14 @@ Improve end-to-end integration testing with maven. Process Executor Plugin allow
 
 *NOTE:* As of 0.7, killing the maven process (using Ctrl+C or kill <pid> command) will stop all the processes started by the plugin.
 ## POM example:
-The latest version is 0.7.
+The latest version is [0.8](https://github.com/bazaarvoice/maven-process-plugin/releases).
 
     <build>
         <plugins>
             <plugin>
                 <groupId>com.bazaarvoice.maven.plugins</groupId>
                 <artifactId>process-exec-maven-plugin</artifactId>
-                <version>0.7</version>
+                <version>0.8</version>
                 <executions>
                     <!--Start process 1, eg., a dropwizard app dependency-->
                     <execution>
