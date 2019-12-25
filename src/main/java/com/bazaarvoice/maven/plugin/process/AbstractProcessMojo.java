@@ -7,6 +7,9 @@ import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Properties;
 import java.util.Stack;
 
 public abstract class AbstractProcessMojo extends AbstractMojo {
@@ -22,8 +25,13 @@ public abstract class AbstractProcessMojo extends AbstractMojo {
     @Parameter(property = "exec.name")
     protected String name;
 
-    @Parameter(property = "exec.healthcheckUrl")
-    protected String healthcheckUrl;
+    @Parameter(defaultValue = "${exec.healthcheckUrl}")
+    protected HealthcheckUrl healthcheckUrl;
+
+    public void setHealthcheckUrl(String url) throws MalformedURLException {
+        this.healthcheckUrl = new HealthcheckUrl();
+        this.healthcheckUrl.setUrl(new URL(url));
+    }
 
     @Parameter(property = "exec.waitAfterLaunch", required = false, defaultValue = "30")
     protected int waitAfterLaunch;
