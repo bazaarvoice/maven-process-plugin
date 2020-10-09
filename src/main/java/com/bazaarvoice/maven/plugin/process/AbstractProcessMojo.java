@@ -40,6 +40,9 @@ public abstract class AbstractProcessMojo extends AbstractMojo {
     @Parameter(defaultValue = "false", property = "exec.redirectErrorStream")
     protected boolean redirectErrorStream;
 
+    @Parameter(property = "exec.stopForcibly")
+    protected boolean stopForcibly;
+
     protected static File ensureDirectory(File dir) {
         if (!dir.mkdirs() && !dir.isDirectory()) {
             throw new RuntimeException("couldn't create directories: " + dir);
@@ -77,7 +80,7 @@ public abstract class AbstractProcessMojo extends AbstractMojo {
             ExecProcess execProcess = processesStack.pop();
             if (execProcess != null) {
                 getLog().info("Stopping process: " + execProcess.getName());
-                execProcess.destroy();
+                execProcess.destroy(stopForcibly);
                 execProcess.waitFor();
                 getLog().info("Stopped process: " + execProcess.getName());
             }

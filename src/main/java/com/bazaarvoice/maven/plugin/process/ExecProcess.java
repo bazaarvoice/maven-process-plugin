@@ -84,11 +84,15 @@ public class ExecProcess {
         return out;
     }
 
-    public void destroy() {
+    public void destroy(boolean forcibly) {
         for (StdoutRedirector redirector : redirectors) {
             redirector.stopIt();
         }
-        process.destroy();
+        if (forcibly) {
+            process.destroyForcibly();
+        } else {
+            process.destroy();
+        }
     }
 
     public void waitFor() {
