@@ -8,7 +8,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import java.io.IOException;
 import java.util.Stack;
 
-@Mojo (name = "stop-all", defaultPhase = LifecyclePhase.POST_INTEGRATION_TEST)
+@Mojo (name = "stop-all", defaultPhase = LifecyclePhase.POST_INTEGRATION_TEST, threadSafe = true)
 public class ProcessStopMojo extends AbstractProcessMojo {
 
     @Override
