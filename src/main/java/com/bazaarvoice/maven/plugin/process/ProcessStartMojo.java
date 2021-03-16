@@ -8,7 +8,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 
 import java.io.File;
 
-@Mojo (name = "start", defaultPhase = LifecyclePhase.PRE_INTEGRATION_TEST)
+@Mojo (name = "start", defaultPhase = LifecyclePhase.PRE_INTEGRATION_TEST, threadSafe = true)
 public class ProcessStartMojo extends AbstractProcessMojo {
 
     @Override
