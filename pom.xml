@@ -24,7 +24,7 @@
 
     <properties>
         <guava.version>15.0</guava.version>
-        <mavenVersion>3.0</mavenVersion>
+        <mavenVersion>3.6.4</mavenVersion>
     </properties>
 
     <dependencies>
