@@ -1,0 +1,25 @@
+####################################################################
+#   Component
+####################################################################
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: maven-process-executor-plugin
+  github.com/project-slug: bazaarvoice/maven-process-plugin
+  description: "Process Executor Plugin allows you to to start multiple processes in pre-integration-test phase in order,
+    and then stops all the processes in post-integration-test phase, in reverse order."
+  annotations:
+    github.com/project-slug: bazaarvoice/maven-process-plugin
+  links:
+    - url: https://bazaarvoice.slack.com/app_redirect?channel=dev-ex
+      title: Slack channel
+      icon: send
+  tags:
+    - maven
+    - java
+    - plugin
+spec:
+  type: library
+  system: devex-tools
+  lifecycle: production
+  owner: developer-experience
