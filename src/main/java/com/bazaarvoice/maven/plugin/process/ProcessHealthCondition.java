@@ -4,8 +4,11 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.URL;
 
 public class ProcessHealthCondition {
@@ -29,6 +32,31 @@ public class ProcessHealthCondition {
         }
         throw new RuntimeException("Process was not healthy even after " + timeoutInSeconds + " seconds");
     }
+
+    public static void waitSecondsUntilHealthy(String tcpHealthcheckHostname, int tcpHealthcheckPort, int timeoutInSeconds) {
+        if (tcpHealthcheckHostname == null) {
+            // Wait for timeout seconds to let the process come up
+            sleep(timeoutInSeconds);
+            return;
+        }   
+        final long start = System.currentTimeMillis();
+		SocketAddress socketAddress = new InetSocketAddress(tcpHealthcheckHostname, tcpHealthcheckPort);
+		Socket socket = new Socket();
+ 
+        while ((System.currentTimeMillis() - start) / 1000 < timeoutInSeconds) {
+            internalSleep();
+    		try {
+    			socket.connect(socketAddress, SECONDS_BETWEEN_CHECKS * 1000);
+    			socket.close();
+    			return; // success!!!
+    		} catch (Exception e) {
+    			//no processes listening yet on this tcp port 
+    		}
+            
+        }   
+        throw new RuntimeException("Process was not healthy even after " + timeoutInSeconds + " seconds");
+    }   
+
 
     private static boolean is200(URL url) {
         try {
